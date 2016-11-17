@@ -1,11 +1,18 @@
 import express from 'express'
-import connection from './config/db-config'
+import bodyParser from 'body-parser'
+
+import userRoute from './controllers/users/user_routes'
 
 const app = express()
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
-app.listen(9000, () => {
-  console.log("server started at 9000")
-  connection.query("select * from penguins" , (err, rows) => {
-    console.log(rows[1].id+ "..." + rows[1].myval)
-  })
+app.get('/', (req, res) => {
+  res.json({success: "Welcome To GetRux"})
 })
+
+app.listen(9000, (req, res) => {
+  console.log("server started at 9000")
+})
+
+app.use('/users', userRoute)
