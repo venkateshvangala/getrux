@@ -10,9 +10,9 @@ function createToken(user){
 }
 
 router.post('/signIn', (req, res) => {
-  let email = req.body.email
+  let mobile = req.body.mobile
   let password = req.body.password
-  UserModel.findByEmail(email, (user) => {
+  UserModel.findByMobile(mobile, (user) => {
     if(!user){
       res.json({ success: false, message: 'Authentication failed. User not found.' });
     } else if(user){
@@ -20,9 +20,7 @@ router.post('/signIn', (req, res) => {
        res.json({ success: false, message: 'Authentication failed. Wrong password.' });
       } else {
         let token = createToken(user)
-        console.log(token)
-        res.header("x-access-token", token);
-        res.json({user});
+        res.json({userId: user.id, token});
       }
     }
   })

@@ -1,15 +1,17 @@
-import express from 'express'
 import bodyParser from 'body-parser'
+import express from 'express'
 import jwt from 'jsonwebtoken'
 import authRoute from './controllers/authentication/auth_routes'
 import userRoute from './controllers/users/user_routes'
 import encryption from './config/auth-config'
 
 const app = express()
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
+
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 
 function verifyToken(req, res, next){
+  console.log("verify me..")
   var token = req.headers['x-access-token'];
   if(token){
     jwt.verify(token, encryption.secret, (err, decoded) => {
@@ -32,8 +34,11 @@ app.listen(9000, (req, res) => {
 })
 
 app.use('/', (req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  console.log("use me..")
+  res.setHeader("Access-Control-Allow-Origin", "*");
+   res.setHeader("Access-Control-Allow-Methods", "POST, GET");
+   res.setHeader("Access-Control-Max-Age", "3600");
+   res.setHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
   next();
 });
 
